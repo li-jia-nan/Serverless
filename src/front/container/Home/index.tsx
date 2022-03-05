@@ -6,7 +6,7 @@ import { parseJsonByString } from '../../../common/utils';
 const schema = parseJsonByString(window.localStorage?.schema, {});
 const listData: any[] = schema?.children?.splice(3) || [];
 
-const Home = () => {
+const Home: React.FC = () => {
   return (
     <div>
       <Banner />
