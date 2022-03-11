@@ -41,8 +41,7 @@ const HomeManagement: React.FC = () => {
     areaListRef?.current?.list.forEach((item: any) => {
       schema.children.push({ name: 'Area' });
     });
-    const schemaStr = JSON.stringify(schema);
-    window.localStorage.schema = schemaStr;
+    window.localStorage.schema = JSON.stringify(schema);
   };
 
   return (
