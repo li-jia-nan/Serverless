@@ -41,11 +41,11 @@ const HomeManagement: React.FC = () => {
         <Header className={styles.header}>
           {collapsed ? (
             <span className="iconfont" onClick={toggleCollapsed}>
-              &#xe62c;
+              bb
             </span>
           ) : (
             <span className="iconfont" onClick={toggleCollapsed}>
-              &#xe629;
+              aa
             </span>
           )}
         </Header>
