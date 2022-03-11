@@ -1,4 +1,4 @@
-import { useState, forwardRef, useImperativeHandle, SetStateAction } from 'react';
+import { useState, forwardRef, useImperativeHandle, ChangeEvent } from 'react';
 import { Input } from 'antd';
 import { parseJsonByString } from '../../../../../common/utils';
 import styles from './style.module.scss';
@@ -13,11 +13,11 @@ const PageSetting: React.ForwardRefRenderFunction<any, any> = (props, ref) => {
     schema?.children?.[0]?.attributes?.description || ''
   );
 
-  const handleTitleChange = (e: { target: { value: SetStateAction<string> } }) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
-  const handleDescriptionChange = (e: { target: { value: SetStateAction<string> } }) => {
+  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
   };
 

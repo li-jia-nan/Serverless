@@ -30,7 +30,14 @@ const AreaList: React.ForwardRefRenderFunction<any, any> = (props, ref) => {
           <li key={index} className={styles.item}>
             <span className={styles.content}>当前区块内容为空</span>
             <span className={styles.delete}>
-              <Button onClick={() => handleDeleteBtnClick(index)} size="small" type="dashed" danger>
+              <Button
+                onClick={() => {
+                  handleDeleteBtnClick(index);
+                }}
+                size="small"
+                type="dashed"
+                danger
+              >
                 删除
               </Button>
             </span>
