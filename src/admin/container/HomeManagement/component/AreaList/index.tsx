@@ -1,13 +1,9 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { Button } from 'antd';
 import styles from './style.module.scss';
-import { parseJsonByString } from '../../../../../common/utils';
-
-const schema = parseJsonByString(window.localStorage.schema, {});
-const listData = schema?.children?.splice(3) || [];
 
 const AreaList: React.ForwardRefRenderFunction<any, any> = (props, ref) => {
-  const [list, setList] = useState<any[]>(listData);
+  const [list, setList] = useState<any[]>([]);
 
   const handleAddBtnClick = () => {
     const newList = [...list];

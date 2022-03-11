@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Layout, Menu, Button } from 'antd';
 import AreaList from './component/AreaList';
-import PageSetting from './component/PageSetting';
 import styles from './style.module.scss';
 
 const { Header, Sider, Content } = Layout;
@@ -19,33 +18,15 @@ const HomeManagement: React.FC = () => {
   const handleHomePageRedirect = () => {
     window.location.href = '/';
   };
-  const pageSettingRef = useRef<any>();
+
   const areaListRef = useRef<any>();
 
   const handleSaveBtnClick = () => {
-    const schema = {
-      name: 'Page',
-      attributes: {},
-      children: [
-        {
-          name: 'Banner',
-          attributes: {
-            title: pageSettingRef?.current?.title,
-            description: pageSettingRef?.current?.description,
-          },
-        },
-        { name: 'CourseList' },
-        { name: 'Footer' },
-      ],
-    };
-    areaListRef?.current?.list.forEach((item: any) => {
-      schema.children.push({ name: 'Area' });
-    });
-    window.localStorage.schema = JSON.stringify(schema);
+    //
   };
 
   return (
-    <Layout>
+    <Layout style={{ height: '100vh' }}>
       <Sider className={styles.sidebar} trigger={null} collapsible collapsed={collapsed}>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['admin-home']}>
           <Menu.Item key="admin-home">
@@ -69,7 +50,6 @@ const HomeManagement: React.FC = () => {
           )}
         </Header>
         <Content className={styles.content}>
-          <PageSetting ref={pageSettingRef} />
           <AreaList ref={areaListRef} />
           <div className={styles.save}>
             <Button type="primary" onClick={handleSaveBtnClick}>

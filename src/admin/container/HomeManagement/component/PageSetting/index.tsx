@@ -1,16 +1,12 @@
 import { useState, forwardRef, useImperativeHandle, ChangeEvent } from 'react';
 import { Input } from 'antd';
-import { parseJsonByString } from '../../../../../common/utils';
 import styles from './style.module.scss';
 
 const { TextArea } = Input;
 
-const { children } = parseJsonByString(window.localStorage?.schema, {}) || {};
-const { attributes } = children?.[0];
-
 const PageSetting: React.ForwardRefRenderFunction<any, any> = (props, ref) => {
-  const [title, setTitle] = useState<string>(attributes?.title || '');
-  const [description, setDescription] = useState<string>(attributes?.description || '');
+  const [title, setTitle] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
