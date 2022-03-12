@@ -2,8 +2,12 @@ import React, { useState, useRef } from 'react';
 import { Layout, Menu, Button } from 'antd';
 import AreaList from './component/AreaList';
 import styles from './style.module.scss';
+import { HomeOutlined, RollbackOutlined } from '@ant-design/icons';
+import { parseJsonByString } from '../../../common/utils';
 
 const { Header, Sider, Content } = Layout;
+
+const schema = parseJsonByString(window.localStorage.schema, {});
 
 const useCollapsed = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
@@ -22,7 +26,10 @@ const HomeManagement: React.FC = () => {
   const areaListRef = useRef<any>();
 
   const handleSaveBtnClick = () => {
-    //
+    const { children } = areaListRef.current;
+    const schema = { name: 'Page', attributes: {}, children };
+    window.localStorage.setItem('schema', JSON.stringify(schema));
+    window.localStorage.schema = JSON.stringify(schema);
   };
 
   return (
@@ -30,10 +37,12 @@ const HomeManagement: React.FC = () => {
       <Sider className={styles.sidebar} trigger={null} collapsible collapsed={collapsed}>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['admin-home']}>
           <Menu.Item key="admin-home">
-            <span className="iconfont">&#xe64d;</span>首页内容管理
+            <HomeOutlined style={{ fontSize: 16, marginRight: 8 }} />
+            首页内容管理
           </Menu.Item>
           <Menu.Item key="admin-back" onClick={handleHomePageRedirect}>
-            <span className="iconfont">&#xe601;</span>返回用户页面
+            <RollbackOutlined style={{ fontSize: 16, marginRight: 8 }} />
+            返回用户页面
           </Menu.Item>
         </Menu>
       </Sider>
@@ -50,7 +59,7 @@ const HomeManagement: React.FC = () => {
           )}
         </Header>
         <Content className={styles.content}>
-          <AreaList ref={areaListRef} />
+          <AreaList ref={areaListRef} children={schema.children || []} />
           <div className={styles.save}>
             <Button type="primary" onClick={handleSaveBtnClick}>
               保存区块配置

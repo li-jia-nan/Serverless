@@ -2,27 +2,31 @@ import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { Button } from 'antd';
 import styles from './style.module.scss';
 
-const AreaList: React.ForwardRefRenderFunction<any, any> = (props, ref) => {
-  const [list, setList] = useState<any[]>([]);
+interface Props {
+  children: any[];
+}
+
+const AreaList: React.ForwardRefRenderFunction<any, Props> = (props, ref) => {
+  const [children, setChildren] = useState<any[]>(props.children);
 
   const handleAddBtnClick = () => {
-    const newList = [...list];
-    newList.push({});
-    setList(newList);
+    const newChildren = [...children];
+    newChildren.push({});
+    setChildren(newChildren);
   };
 
   const handleDeleteBtnClick = (index: number) => {
-    const newList = [...list];
+    const newList = [...children];
     newList.splice(index, 1);
-    setList(newList);
+    setChildren(newList);
   };
 
-  useImperativeHandle(ref, () => ({ list }));
+  useImperativeHandle(ref, () => ({ children: children }));
 
   return (
     <div>
       <ul className={styles.list}>
-        {list.map((item, index) => (
+        {children.map((item, index) => (
           <li key={index} className={styles.item}>
             <span className={styles.content}>当前区块内容为空</span>
             <span className={styles.delete}>
