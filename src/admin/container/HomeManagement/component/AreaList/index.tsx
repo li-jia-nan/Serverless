@@ -1,24 +1,21 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { Button } from 'antd';
 import styles from './style.module.scss';
+import AreaItem from '../AreaItem';
 
 interface Props {
   children: any[];
 }
 
 const AreaList: React.ForwardRefRenderFunction<any, Props> = (props, ref) => {
-  const [children, setChildren] = useState<any[]>(props.children);
+  const [children, setChildren] = useState<Record<PropertyKey, any>[]>(props.children);
 
-  const handleAddBtnClick = () => {
-    const newChildren = [...children];
-    newChildren.push({});
-    setChildren(newChildren);
+  const addItemToChildren = (): void => {
+    setChildren([...children, {}]);
   };
 
-  const handleDeleteBtnClick = (index: number) => {
-    const newList = [...children];
-    newList.splice(index, 1);
-    setChildren(newList);
+  const removeItemFromChildren = (index: number): void => {
+    setChildren(list => list.filter((item, i) => i !== index));
   };
 
   useImperativeHandle(ref, () => ({ children: children }));
@@ -27,24 +24,10 @@ const AreaList: React.ForwardRefRenderFunction<any, Props> = (props, ref) => {
     <div>
       <ul className={styles.list}>
         {children.map((item, index) => (
-          <li key={index} className={styles.item}>
-            <span className={styles.content}>当前区块内容为空</span>
-            <span className={styles.delete}>
-              <Button
-                onClick={() => {
-                  handleDeleteBtnClick(index);
-                }}
-                size="small"
-                type="dashed"
-                danger
-              >
-                删除
-              </Button>
-            </span>
-          </li>
+          <AreaItem key={index} index={index} removeItemFromChildren={removeItemFromChildren} />
         ))}
       </ul>
-      <Button type="primary" ghost onClick={handleAddBtnClick}>
+      <Button type="primary" ghost onClick={addItemToChildren}>
         新增页面区块
       </Button>
     </div>

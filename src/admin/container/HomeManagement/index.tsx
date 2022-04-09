@@ -28,7 +28,6 @@ const HomeManagement: React.FC = () => {
   const handleSaveBtnClick = () => {
     const { children } = areaListRef.current;
     const schema = { name: 'Page', attributes: {}, children };
-    window.localStorage.setItem('schema', JSON.stringify(schema));
     window.localStorage.schema = JSON.stringify(schema);
   };
 
