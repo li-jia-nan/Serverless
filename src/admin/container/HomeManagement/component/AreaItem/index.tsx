@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { Button, Modal, Select } from 'antd';
 import styles from './style.module.scss';
 
@@ -9,10 +9,28 @@ interface Props {
   index: number;
   item: Record<PropertyKey, any>;
   removeItemFromChildren: (index: number) => void;
+  // changeChildrenItem: (index: number, child: Record<PropertyKey, any>) => void;
 }
 
-const AreaItem: React.FC<Props> = ({ index, item, removeItemFromChildren }) => {
+const AreaItem: React.ForwardRefRenderFunction<
+  { getSchema: () => Record<PropertyKey, any> },
+  Props
+> = (props, ref) => {
+  const { index, item, removeItemFromChildren } = props;
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [schema, setSchema] = useState<Record<PropertyKey, any>>(item);
+
+  useImperativeHandle<
+    { getSchema: () => Record<PropertyKey, any> },
+    { getSchema: () => Record<PropertyKey, any> }
+  >(ref, () => {
+    return {
+      getSchema() {
+        return schema;
+      },
+    };
+  });
+
   const showModal = (): void => {
     setIsModalVisible(true);
   };
@@ -20,11 +38,13 @@ const AreaItem: React.FC<Props> = ({ index, item, removeItemFromChildren }) => {
     setIsModalVisible(false);
   };
   const handleCancelClick = (): void => {
+    setSchema(item);
     setIsModalVisible(false);
   };
   const handleSelect = (value: any): void => {
-    console.log(value);
+    setSchema({ name: value, attributes: {}, children: [] });
   };
+
   return (
     <li className={styles.item}>
       <span className={styles.content} onClick={showModal}>
@@ -48,7 +68,7 @@ const AreaItem: React.FC<Props> = ({ index, item, removeItemFromChildren }) => {
         onOk={handleOkClick}
         onCancel={handleCancelClick}
       >
-        <Select className="w-full" onChange={handleSelect}>
+        <Select className="w-full" value={schema.name} onChange={handleSelect}>
           {SELECT_OPTIONS.map(item => (
             <Option key={item} value={item}>
               {item}
@@ -60,4 +80,4 @@ const AreaItem: React.FC<Props> = ({ index, item, removeItemFromChildren }) => {
   );
 };
 
-export default AreaItem;
+export default forwardRef(AreaItem);

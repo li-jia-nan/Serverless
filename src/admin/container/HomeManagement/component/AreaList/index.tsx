@@ -1,15 +1,22 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react';
+import React, { useState, useImperativeHandle, forwardRef, createRef, useMemo } from 'react';
 import { Button } from 'antd';
 import styles from './style.module.scss';
 import AreaItem from '../AreaItem';
 
 interface Props {
-  children: any[];
+  children: Record<PropertyKey, any>[];
 }
 
-const AreaList: React.ForwardRefRenderFunction<any, Props> = (props, ref) => {
+const AreaList: React.ForwardRefRenderFunction<
+  { getSchema: () => Record<PropertyKey, any>[] },
+  Props
+> = (props, ref) => {
   const [children, setChildren] = useState<Record<PropertyKey, any>[]>(props.children);
-
+  const refs = useMemo(
+    () => children.map(item => createRef<{ getSchema: () => Record<PropertyKey, any> }>()),
+    [children]
+  );
+  console.log(refs);
   const addItemToChildren = (): void => {
     setChildren([...children, {}]);
   };
@@ -18,7 +25,16 @@ const AreaList: React.ForwardRefRenderFunction<any, Props> = (props, ref) => {
     setChildren(list => list.filter((item, i) => i !== index));
   };
 
-  useImperativeHandle(ref, () => ({ children: children }));
+  useImperativeHandle<
+    { getSchema: Record<PropertyKey, any> },
+    { getSchema: Record<PropertyKey, any> }
+  >(ref, () => {
+    return {
+      getSchema() {
+        return children.map((item, i) => refs?.[i]?.current?.getSchema());
+      },
+    };
+  });
 
   return (
     <div>
@@ -29,6 +45,8 @@ const AreaList: React.ForwardRefRenderFunction<any, Props> = (props, ref) => {
             index={index}
             item={item}
             removeItemFromChildren={removeItemFromChildren}
+            ref={refs[index]}
+            // changeChildrenItem={changeChildrenItem}
           />
         ))}
       </ul>
