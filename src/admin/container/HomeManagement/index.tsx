@@ -7,7 +7,7 @@ import { parseJsonByString } from '../../../common/utils';
 
 const { Header, Sider, Content } = Layout;
 
-const schema = parseJsonByString(window.localStorage.schema, {});
+const schema = parseJsonByString<Record<PropertyKey, any>>(window.localStorage.schema, {});
 
 const useCollapsed = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
