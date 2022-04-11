@@ -24,7 +24,12 @@ const AreaList: React.ForwardRefRenderFunction<any, Props> = (props, ref) => {
     <div>
       <ul className={styles.list}>
         {children.map((item, index) => (
-          <AreaItem key={index} index={index} removeItemFromChildren={removeItemFromChildren} />
+          <AreaItem
+            key={index}
+            index={index}
+            item={item}
+            removeItemFromChildren={removeItemFromChildren}
+          />
         ))}
       </ul>
       <Button type="primary" ghost onClick={addItemToChildren}>
