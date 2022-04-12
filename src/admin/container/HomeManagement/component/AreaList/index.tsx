@@ -3,14 +3,15 @@ import { Button } from 'antd';
 import styles from './style.module.scss';
 import AreaItem from '../AreaItem';
 
-interface Props {
+interface PropsType {
   children: Record<PropertyKey, any>[];
 }
 
-const AreaList: React.ForwardRefRenderFunction<
-  { getSchema: () => Record<PropertyKey, any>[] },
-  Props
-> = (props, ref) => {
+interface RefType {
+  getSchema: () => Record<PropertyKey, any>[];
+}
+
+const AreaList: React.ForwardRefRenderFunction<RefType, PropsType> = (props, ref) => {
   const [children, setChildren] = useState<Record<PropertyKey, any>[]>(props.children);
   const refs = useMemo(
     () => children.map(item => createRef<{ getSchema: () => Record<PropertyKey, any> }>()),
