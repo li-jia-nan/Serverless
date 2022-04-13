@@ -1,4 +1,4 @@
-import React, { useState, useRef, RefObject } from 'react';
+import React, { useState, useRef } from 'react';
 import { Layout, Menu, Button } from 'antd';
 import AreaList from './component/AreaList';
 import styles from './style.module.scss';
@@ -23,12 +23,20 @@ const HomeManagement: React.FC = () => {
     window.location.href = '/';
   };
 
-  const areaListRef = useRef<{ getSchema: () => Record<PropertyKey, any>[] }>();
+  const areaListRef = useRef<{
+    getSchema: () => Record<PropertyKey, any>[];
+    resetSchema: () => void;
+  }>(null);
 
-  const handleSaveBtnClick = () => {
+  const handleSaveBtnClick = (): void => {
     const { getSchema } = areaListRef.current || {};
     const schema = { name: 'Page', attributes: {}, children: getSchema?.() };
     window.localStorage.schema = JSON.stringify(schema);
+  };
+
+  const handleResetBtnClick = (): void => {
+    const { resetSchema } = areaListRef.current || {};
+    console.log(resetSchema);
   };
 
   return (
@@ -58,13 +66,13 @@ const HomeManagement: React.FC = () => {
           )}
         </Header>
         <Content className={styles.content}>
-          <AreaList
-            ref={areaListRef as RefObject<{ getSchema: () => Record<PropertyKey, any>[] }>}
-            children={schema.children || []}
-          />
+          <AreaList ref={areaListRef} children={schema.children || []} />
           <div className={styles.save}>
             <Button type="primary" onClick={handleSaveBtnClick}>
               保存区块配置
+            </Button>
+            <Button type="primary" onClick={handleResetBtnClick}>
+              重置区块配置
             </Button>
           </div>
         </Content>

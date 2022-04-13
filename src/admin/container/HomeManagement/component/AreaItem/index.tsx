@@ -3,13 +3,13 @@ import { Button, Modal, Select } from 'antd';
 import styles from './style.module.scss';
 
 const { Option } = Select;
+let prevScheam = {};
 
 const SELECT_OPTIONS = ['Banner 组件', 'List 组件', 'Footer 组件'];
 interface Props {
   index: number;
   item: Record<PropertyKey, any>;
   removeItemFromChildren: (index: number) => void;
-  // changeChildrenItem: (index: number, child: Record<PropertyKey, any>) => void;
 }
 
 const AreaItem: React.ForwardRefRenderFunction<
@@ -22,11 +22,15 @@ const AreaItem: React.ForwardRefRenderFunction<
 
   useImperativeHandle<
     { getSchema: () => Record<PropertyKey, any> },
-    { getSchema: () => Record<PropertyKey, any> }
+    { getSchema: () => Record<PropertyKey, any>; resetSchema: () => void }
   >(ref, () => {
     return {
-      getSchema() {
+      getSchema(): Record<PropertyKey, any> {
         return schema;
+      },
+      resetSchema(): void {
+        setSchema(item);
+        prevScheam = {};
       },
     };
   });
@@ -36,19 +40,22 @@ const AreaItem: React.ForwardRefRenderFunction<
   };
   const handleOkClick = (): void => {
     setIsModalVisible(false);
+    prevScheam = {};
   };
   const handleCancelClick = (): void => {
-    setSchema(item);
+    setSchema(prevScheam);
     setIsModalVisible(false);
+    prevScheam = {};
   };
   const handleSelect = (value: any): void => {
+    prevScheam = { ...schema };
     setSchema({ name: value, attributes: {}, children: [] });
   };
 
   return (
     <li className={styles.item}>
       <span className={styles.content} onClick={showModal}>
-        当前区块内容为空
+        {schema.name || '当前区块内容为空'}
       </span>
       <span className={styles.delete}>
         <Button
