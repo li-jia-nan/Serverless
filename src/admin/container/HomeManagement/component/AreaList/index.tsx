@@ -1,4 +1,11 @@
-import React, { useState, forwardRef, createRef, useMemo, useImperativeHandle } from 'react';
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  createRef,
+  useMemo,
+  useImperativeHandle,
+} from 'react';
 import { Button } from 'antd';
 import styles from './style.module.scss';
 import AreaItem from '../AreaItem';
@@ -15,19 +22,16 @@ const AreaList: React.ForwardRefRenderFunction<
       ),
     [children]
   );
+  useEffect(() => {
+    setChildren(props.children);
+  }, [props.children]);
   useImperativeHandle<
-    { getSchema: () => Record<PropertyKey, any>; resetSchema: () => void },
-    { getSchema: () => Record<PropertyKey, any>; resetSchema: () => void }
+    { getSchema: () => Record<PropertyKey, any> },
+    { getSchema: () => Record<PropertyKey, any> }
   >(ref, () => {
     return {
       getSchema(): Record<PropertyKey, any> {
         return children.map((_, i) => refs?.[i]?.current?.getSchema?.());
-      },
-      resetSchema(): void {
-        setChildren(props.children);
-        children.forEach((clild, i) => {
-          refs?.[i]?.current?.resetSchema();
-        });
       },
     };
   });

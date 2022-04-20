@@ -7,7 +7,7 @@ import { parseJsonByString } from '../../../common/utils';
 
 const { Header, Sider, Content } = Layout;
 
-const schema = parseJsonByString<Record<PropertyKey, any>>(window.localStorage.schema, {});
+const initialschema = parseJsonByString<Record<PropertyKey, any>>(window.localStorage.schema, {});
 
 const useCollapsed = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
@@ -19,6 +19,7 @@ const useCollapsed = () => {
 
 const HomeManagement: React.FC = () => {
   const { collapsed, toggleCollapsed } = useCollapsed();
+  const [schema, setSchema] = useState(initialschema);
   const handleHomePageRedirect = () => {
     window.location.href = '/';
   };
@@ -35,8 +36,8 @@ const HomeManagement: React.FC = () => {
   };
 
   const handleResetBtnClick = (): void => {
-    const { resetSchema } = areaListRef.current || {};
-    console.log(resetSchema);
+    const newSchema = parseJsonByString<Record<PropertyKey, any>>(window.localStorage.schema, {});
+    setSchema(newSchema);
   };
 
   return (

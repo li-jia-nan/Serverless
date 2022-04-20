@@ -1,9 +1,8 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Button, Modal, Select } from 'antd';
 import styles from './style.module.scss';
 
 const { Option } = Select;
-let prevScheam = {};
 
 const SELECT_OPTIONS = ['Banner 组件', 'List 组件', 'Footer 组件'];
 interface PropsType {
@@ -20,18 +19,20 @@ const AreaItem: React.ForwardRefRenderFunction<RefType, PropsType> = (props, ref
   const { index, item, removeItemFromChildren } = props;
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [schema, setSchema] = useState<Record<PropertyKey, any>>(item);
+  const [temp, setTemp] = useState<Record<PropertyKey, any>>(item);
+
+  useEffect(() => {
+    setSchema(props.item);
+    setTemp(props.item);
+  }, [props.item]);
 
   useImperativeHandle<
     { getSchema: () => Record<PropertyKey, any> },
-    { getSchema: () => Record<PropertyKey, any>; resetSchema: () => void }
+    { getSchema: () => Record<PropertyKey, any> }
   >(ref, () => {
     return {
       getSchema(): Record<PropertyKey, any> {
         return schema;
-      },
-      resetSchema(): void {
-        setSchema(item);
-        prevScheam = {};
       },
     };
   });
@@ -41,16 +42,14 @@ const AreaItem: React.ForwardRefRenderFunction<RefType, PropsType> = (props, ref
   };
   const handleOkClick = (): void => {
     setIsModalVisible(false);
-    prevScheam = {};
+    setSchema(temp);
   };
   const handleCancelClick = (): void => {
-    setSchema(prevScheam);
     setIsModalVisible(false);
-    prevScheam = {};
+    setTemp(schema);
   };
   const handleSelect = (value: any): void => {
-    prevScheam = { ...schema };
-    setSchema({ name: value, attributes: {}, children: [] });
+    setTemp({ name: value, attributes: {}, children: [] });
   };
 
   return (
@@ -76,7 +75,7 @@ const AreaItem: React.ForwardRefRenderFunction<RefType, PropsType> = (props, ref
         onOk={handleOkClick}
         onCancel={handleCancelClick}
       >
-        <Select className="w-full" value={schema.name} onChange={handleSelect}>
+        <Select className="w-full" value={temp.name} onChange={handleSelect}>
           {SELECT_OPTIONS.map(item => (
             <Option key={item} value={item}>
               {item}
