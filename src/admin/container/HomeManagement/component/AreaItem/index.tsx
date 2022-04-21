@@ -9,6 +9,7 @@ interface PropsType {
   index: number;
   item: Record<PropertyKey, any>;
   removeItemFromChildren: (index: number) => void;
+  changeAreaItem: (i: number, item: Record<PropertyKey, any>) => void;
 }
 
 interface RefType {
@@ -16,7 +17,7 @@ interface RefType {
 }
 
 const AreaItem: React.ForwardRefRenderFunction<RefType, PropsType> = (props, ref) => {
-  const { index, item, removeItemFromChildren } = props;
+  const { index, item, removeItemFromChildren, changeAreaItem } = props;
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [schema, setSchema] = useState<Record<PropertyKey, any>>(item);
   const [temp, setTemp] = useState<Record<PropertyKey, any>>(item);
@@ -43,6 +44,7 @@ const AreaItem: React.ForwardRefRenderFunction<RefType, PropsType> = (props, ref
   const handleOkClick = (): void => {
     setIsModalVisible(false);
     setSchema(temp);
+    changeAreaItem(index, temp);
   };
   const handleCancelClick = (): void => {
     setIsModalVisible(false);

@@ -7,6 +7,7 @@ import React, {
   useImperativeHandle,
 } from 'react';
 import { Button } from 'antd';
+import { ReactSortable, ItemInterface } from 'react-sortablejs';
 import styles from './style.module.scss';
 import AreaItem from '../AreaItem';
 
@@ -39,6 +40,12 @@ const AreaList: React.ForwardRefRenderFunction<
     setChildren([...children, {}]);
   };
 
+  const changeAreaItem = (index: number, item: Record<PropertyKey, any>): void => {
+    const newChildren = [...children];
+    newChildren.splice(index, 1, item);
+    setChildren(newChildren);
+  };
+
   const removeItemFromChildren = (index: number): void => {
     setChildren(list => list.filter((item, i) => i !== index));
   };
@@ -46,16 +53,18 @@ const AreaList: React.ForwardRefRenderFunction<
   return (
     <div>
       <ul className={styles.list}>
-        {children.map((item, index) => (
-          <AreaItem
-            key={index}
-            index={index}
-            item={item}
-            removeItemFromChildren={removeItemFromChildren}
-            ref={refs[index]}
-            // changeChildrenItem={changeChildrenItem}
-          />
-        ))}
+        <ReactSortable list={children as unknown as ItemInterface[]} setList={setChildren}>
+          {children.map((item, index) => (
+            <AreaItem
+              key={index}
+              index={index}
+              item={item}
+              removeItemFromChildren={removeItemFromChildren}
+              changeAreaItem={changeAreaItem}
+              ref={refs[index]}
+            />
+          ))}
+        </ReactSortable>
       </ul>
       <Button type="primary" ghost onClick={addItemToChildren}>
         新增页面区块
