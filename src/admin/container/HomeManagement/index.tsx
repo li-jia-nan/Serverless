@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Layout, Menu, Button } from 'antd';
 import { useDispatch } from 'react-redux';
 import AreaList from './component/AreaList';
@@ -9,8 +9,6 @@ import useTypeSelector from '../../../hooks/useTypeSelector';
 
 const { Header, Sider, Content } = Layout;
 
-const initialschema = parseJsonByString<Record<PropertyKey, any>>(window.localStorage.schema, {});
-
 const useCollapsed = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const toggleCollapsed = () => {
@@ -19,33 +17,32 @@ const useCollapsed = () => {
   return { collapsed, toggleCollapsed };
 };
 
+const useStore = () => {
+  const dispatch = useDispatch();
+  const { schema } = useTypeSelector(state => state.HomeManagement);
+  const changeSchema = (schema: any) => {
+    const action = {
+      type: 'CHANGE_SCHEMA',
+      value: schema,
+    };
+    dispatch(action);
+  };
+  return { schema, changeSchema };
+};
+
 const HomeManagement: React.FC = () => {
-  const sa = useTypeSelector(state => {
-    console.log('====================================');
-    console.log(state);
-    console.log('====================================');
-    return state;
-  });
   const { collapsed, toggleCollapsed } = useCollapsed();
-  const [schema, setSchema] = useState(initialschema);
+  const { schema, changeSchema } = useStore();
   const handleHomePageRedirect = () => {
     window.location.href = '/';
   };
 
-  const areaListRef = useRef<{
-    getSchema: () => Record<PropertyKey, any>[];
-    resetSchema: () => void;
-  }>(null);
-
   const handleSaveBtnClick = (): void => {
-    const { getSchema } = areaListRef.current || {};
-    const schema = { name: 'Page', attributes: {}, children: getSchema?.() };
     window.localStorage.schema = JSON.stringify(schema);
   };
 
   const handleResetBtnClick = (): void => {
-    const newSchema = parseJsonByString<Record<PropertyKey, any>>(window.localStorage.schema, {});
-    setSchema(newSchema);
+    changeSchema(parseJsonByString<Record<PropertyKey, any>>(window.localStorage.schema, {}));
   };
 
   return (
@@ -75,7 +72,7 @@ const HomeManagement: React.FC = () => {
           )}
         </Header>
         <Content className={styles.content}>
-          <AreaList ref={areaListRef} children={schema.children || []} />
+          <AreaList children={schema.children || []} />
           <div className={styles.save}>
             <Button type="primary" onClick={handleSaveBtnClick}>
               保存区块配置
