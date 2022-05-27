@@ -1,13 +1,16 @@
 import { Reducer } from 'redux';
+import { produce } from 'immer';
 
 const defaultSchame = {
-  name: 'page',
-  attributes: {},
-  children: [],
+  schema: {
+    name: 'page',
+    attributes: {},
+    children: [],
+  },
 };
 
 const reducer: Reducer<typeof defaultSchame> = (state = defaultSchame, action) => {
-  return state;
+  return produce(state, draft => {});
 };
 
 export default reducer;
