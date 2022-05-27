@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { Layout, Menu, Button } from 'antd';
+import { useDispatch } from 'react-redux';
 import AreaList from './component/AreaList';
 import styles from './style.module.scss';
 import { HomeOutlined, RollbackOutlined } from '@ant-design/icons';
 import { parseJsonByString } from '../../../common/utils';
+import useTypeSelector from '../../../hooks/useTypeSelector';
 
 const { Header, Sider, Content } = Layout;
 
@@ -18,6 +20,12 @@ const useCollapsed = () => {
 };
 
 const HomeManagement: React.FC = () => {
+  const sa = useTypeSelector(state => {
+    console.log('====================================');
+    console.log(state);
+    console.log('====================================');
+    return state;
+  });
   const { collapsed, toggleCollapsed } = useCollapsed();
   const [schema, setSchema] = useState(initialschema);
   const handleHomePageRedirect = () => {
