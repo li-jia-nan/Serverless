@@ -16,7 +16,7 @@ const AreaList: React.FC = () => {
   return (
     <div>
       <ul className={styles.list}>
-        {schema.children.map((item, index) => (
+        {schema.children.map((_, index) => (
           <AreaItem key={index} index={index} />
         ))}
       </ul>

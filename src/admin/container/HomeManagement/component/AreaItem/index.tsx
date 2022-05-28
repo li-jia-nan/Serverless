@@ -12,43 +12,45 @@ interface PropsType {
   index: number;
 }
 
+const useStore = (index: number) => {
+  const dispatch = useDispatch();
+  const pageChild = useTypeSelector(state => state.HomeManagement.schema.children[index]);
+  const changePageChild = (temp: any) => {
+    dispatch(addChangePageChildAction(temp, index));
+  };
+  const removePageChild = () => {
+    dispatch(addDeletePageChildAction(index));
+  };
+  return { pageChild, changePageChild, removePageChild } as const;
+};
+
 const AreaItem: React.FC<PropsType> = props => {
   const { index } = props;
+  const { pageChild, changePageChild, removePageChild } = useStore(index);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const dispatch = useDispatch();
-  const { schema } = useTypeSelector(state => state.HomeManagement);
-  const [temp, setTemp] = useState<Record<PropertyKey, any>>(schema.children[index]);
+  const [tempPageChild, setTempPageChild] = useState<Record<PropertyKey, any>>(pageChild);
   const showModal = (): void => {
     setIsModalVisible(true);
   };
   const handleOkClick = (): void => {
     setIsModalVisible(false);
-    dispatch(addChangePageChildAction(temp, index));
+    changePageChild(tempPageChild);
   };
   const handleCancelClick = (): void => {
     setIsModalVisible(false);
-    setTemp(schema);
+    setTempPageChild(pageChild);
   };
   const handleSelect = (value: any): void => {
-    setTemp({ name: value, attributes: {}, children: [] });
+    setTempPageChild({ name: value, attributes: {}, children: [] });
   };
-  const removePageChild = (i: number) => {
-    dispatch(addDeletePageChildAction(i));
-  };
+
   return (
     <li className={styles.item}>
       <span className={styles.content} onClick={showModal}>
-        {schema.name || '当前区块内容为空'}
+        {tempPageChild.name || '当前区块内容为空'}
       </span>
       <span className={styles.delete}>
-        <Button
-          onClick={() => {
-            removePageChild(index);
-          }}
-          size="small"
-          type="dashed"
-          danger
-        >
+        <Button onClick={removePageChild} size="small" type="dashed" danger>
           删除
         </Button>
       </span>
@@ -58,7 +60,7 @@ const AreaItem: React.FC<PropsType> = props => {
         onOk={handleOkClick}
         onCancel={handleCancelClick}
       >
-        <Select className="w-full" value={schema.name} onChange={handleSelect}>
+        <Select className="w-full" value={tempPageChild.name} onChange={handleSelect}>
           {SELECT_OPTIONS.map(item => (
             <Option key={item} value={item}>
               {item}

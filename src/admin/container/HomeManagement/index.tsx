@@ -69,7 +69,7 @@ const HomeManagement: React.FC = () => {
           )}
         </Header>
         <Content className={styles.content}>
-          <AreaList children={schema.children || []} />
+          <AreaList />
           <div className={styles.save}>
             <Button type="primary" onClick={handleSaveBtnClick}>
               保存区块配置
