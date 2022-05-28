@@ -5,6 +5,7 @@ import AreaList from './component/AreaList';
 import styles from './style.module.scss';
 import { HomeOutlined, RollbackOutlined } from '@ant-design/icons';
 import { parseJsonByString } from '../../../common/utils';
+import { getChangeSchmaAction } from './store/action';
 import useTypeSelector from '../../../hooks/useTypeSelector';
 
 const { Header, Sider, Content } = Layout;
@@ -14,20 +15,16 @@ const useCollapsed = () => {
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
   };
-  return { collapsed, toggleCollapsed };
+  return { collapsed, toggleCollapsed } as const;
 };
 
 const useStore = () => {
   const dispatch = useDispatch();
   const { schema } = useTypeSelector(state => state.HomeManagement);
   const changeSchema = (schema: any) => {
-    const action = {
-      type: 'CHANGE_SCHEMA',
-      value: schema,
-    };
-    dispatch(action);
+    dispatch(getChangeSchmaAction(schema));
   };
-  return { schema, changeSchema };
+  return { schema, changeSchema } as const;
 };
 
 const HomeManagement: React.FC = () => {

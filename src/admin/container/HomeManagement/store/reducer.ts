@@ -1,6 +1,7 @@
 import { AnyAction, Reducer } from 'redux';
 import { produce } from 'immer';
-import { parseJsonByString } from '../../../common/utils';
+import { parseJsonByString } from '../../../../common/utils';
+import { CHANGE_SCHEMA } from './constant';
 
 const initialschema = parseJsonByString<Record<PropertyKey, any>>(window.localStorage.schema, {
   name: 'page',
@@ -15,7 +16,7 @@ const defaultState = {
 const reducer: Reducer<typeof defaultState, AnyAction> = (state = defaultState, action) => {
   return produce(state, draft => {
     switch (action.type) {
-      case 'CHANGE_SCHEMA':
+      case CHANGE_SCHEMA:
         draft.schema = action.value;
         break;
       default:

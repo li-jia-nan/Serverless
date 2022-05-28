@@ -1,5 +1,5 @@
 import { legacy_createStore as createStore, combineReducers } from 'redux';
-import HomeManagementReducer from './reducer/HomeManagement';
+import HomeManagementReducer from './container/HomeManagement/store/reducer';
 
 const reducer = combineReducers({
   HomeManagement: HomeManagementReducer,
