@@ -1,7 +1,13 @@
 import { AnyAction, Reducer } from 'redux';
 import { produce } from 'immer';
 import { parseJsonByString } from '../../../../common/utils';
-import { CHANGE_SCHEMA, ADD_PAGE_CHILDREN, CHANGE_PAGE_CHILD, DELETE_PAGE_CHILD } from './constant';
+import {
+  CHANGE_SCHEMA,
+  ADD_PAGE_CHILDREN,
+  CHANGE_PAGE_CHILD,
+  DELETE_PAGE_CHILD,
+  CHANGE_PAGE_CHILD_POSITION,
+} from './constant';
 
 interface InitType {
   schema: {
@@ -35,6 +41,8 @@ const reducer: Reducer<typeof defaultState, AnyAction> = (state = defaultState, 
         break;
       case DELETE_PAGE_CHILD:
         draft.schema.children.splice(action.index, 1);
+        break;
+      case CHANGE_PAGE_CHILD_POSITION:
         break;
       default:
         break;

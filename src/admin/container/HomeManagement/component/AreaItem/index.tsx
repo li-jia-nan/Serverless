@@ -4,11 +4,13 @@ import styles from './style.module.scss';
 import useTypeSelector from '../../../../../hooks/useTypeSelector';
 import { useDispatch } from 'react-redux';
 import { addChangePageChildAction, addDeletePageChildAction } from '../../store/action';
+import { SortableElement } from 'react-sortable-hoc';
 
 const { Option } = Select;
 
 const SELECT_OPTIONS = ['Banner 组件', 'List 组件', 'Footer 组件'];
 interface PropsType {
+  value: number;
   index: number;
 }
 
@@ -25,7 +27,7 @@ const useStore = (index: number) => {
 };
 
 const AreaItem: React.FC<PropsType> = props => {
-  const { index } = props;
+  const { value: index } = props;
   const { pageChild, changePageChild, removePageChild } = useStore(index);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [tempPageChild, setTempPageChild] = useState<Record<PropertyKey, any>>(pageChild);
@@ -72,4 +74,4 @@ const AreaItem: React.FC<PropsType> = props => {
   );
 };
 
-export default AreaItem;
+export default SortableElement(AreaItem);
