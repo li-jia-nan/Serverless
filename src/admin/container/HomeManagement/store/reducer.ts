@@ -1,5 +1,5 @@
 import { AnyAction, Reducer } from 'redux';
-import { produce } from 'immer';
+import { produce, original } from 'immer';
 import { parseJsonByString } from '../../../../common/utils';
 import {
   CHANGE_SCHEMA,
@@ -43,6 +43,10 @@ const reducer: Reducer<typeof defaultState, AnyAction> = (state = defaultState, 
         draft.schema.children.splice(action.index, 1);
         break;
       case CHANGE_PAGE_CHILD_POSITION:
+        const { oldIndex, newIndex } = action;
+        const copy = original(draft.schema.children);
+        draft.schema.children.splice(oldIndex, 1);
+        draft.schema.children.splice(newIndex, 0, copy?.[oldIndex]);
         break;
       default:
         break;

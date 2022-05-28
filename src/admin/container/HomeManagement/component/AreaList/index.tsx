@@ -29,7 +29,7 @@ const AreaList: React.FC = () => {
   };
   return (
     <div>
-      <SortableList list={schema.children} onSortEnd={onSortEnd} />
+      <SortableList lockAxis="y" distance={5} list={schema.children} onSortEnd={onSortEnd} />
       <Button type="primary" ghost onClick={addPageChildren}>
         新增页面区块
       </Button>
