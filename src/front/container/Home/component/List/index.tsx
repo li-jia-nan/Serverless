@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './style.module.scss';
 
-const Courses: React.FC = () => {
+const List: React.FC = () => {
   return (
     <div className="wrapper">
       <ul className={styles.list}>
@@ -137,4 +137,4 @@ const Courses: React.FC = () => {
   );
 };
 
-export default Courses;
+export default List;

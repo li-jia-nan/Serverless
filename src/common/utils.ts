@@ -1,6 +1,6 @@
 export const parseJsonByString = <T = Record<PropertyKey, any>>(
   str: string,
-  defaultValue: T
+  defaultValue: Record<PropertyKey, any>
 ): T => {
   try {
     return JSON.parse(str);

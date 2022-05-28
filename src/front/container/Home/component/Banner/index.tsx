@@ -1,12 +1,8 @@
 import React from 'react';
-import { parseJsonByString } from '../../../../../common/utils';
 import styles from './style.module.scss';
 
-const schema = parseJsonByString(window.localStorage?.schema, {});
-const banerSchema = schema?.children?.[0] || {};
-
-const Banner: React.FC = () => {
-  const { title = '', description = '' } = banerSchema?.attributes || {};
+const Banner: React.FC<{ schema: any }> = ({ schema }) => {
+  const { title = '', description = '' } = schema?.attributes || {};
   return (
     <div className="wrapper">
       <div className={styles.banner}>
