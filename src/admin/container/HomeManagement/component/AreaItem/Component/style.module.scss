@@ -1,0 +1,13 @@
+.wrapper {
+  margin-top: 15px;
+  .row {
+    display: flex;
+    margin-bottom: 15px;
+    .label {
+      width: 70px;
+    }
+    .content {
+      flex: 1;
+    }
+  }
+}

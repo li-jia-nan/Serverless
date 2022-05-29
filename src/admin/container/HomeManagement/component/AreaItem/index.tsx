@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Modal, Select } from 'antd';
-import styles from './style.module.scss';
 import useTypeSelector from '../../../../../hooks/useTypeSelector';
 import { useDispatch } from 'react-redux';
 import { addChangePageChildAction, addDeletePageChildAction } from '../../store/action';
 import { SortableElement } from 'react-sortable-hoc';
+import Banner from './Component/Banner';
+import Footer from './Component/Footer';
+import List from './Component/List';
+import styles from './style.module.scss';
 
 const { Option } = Select;
 
@@ -46,6 +49,19 @@ const AreaItem: React.FC<PropsType> = props => {
     setTempPageChild({ name: value, attributes: {}, children: [] });
   };
 
+  const GetComponent: React.FC<Record<PropertyKey, any>> = props => {
+    switch (tempPageChild.name) {
+      case 'Banner 组件':
+        return <Banner {...props} />;
+      case 'List 组件':
+        return <List {...props} />;
+      case 'Footer 组件':
+        return <Footer {...props} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <li className={styles.item}>
       <span className={styles.content} onClick={showModal}>
@@ -69,6 +85,7 @@ const AreaItem: React.FC<PropsType> = props => {
             </Option>
           ))}
         </Select>
+        <GetComponent {...tempPageChild} />
       </Modal>
     </li>
   );
