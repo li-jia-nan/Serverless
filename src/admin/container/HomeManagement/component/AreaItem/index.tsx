@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Select } from 'antd';
 import useTypeSelector from '../../../../../hooks/useTypeSelector';
 import { useDispatch } from 'react-redux';
@@ -10,6 +10,12 @@ import List from './Component/List';
 import styles from './style.module.scss';
 
 const { Option } = Select;
+
+const map = {
+  'Banner 组件': Banner,
+  'List 组件': List,
+  'Footer 组件': Footer,
+};
 
 const SELECT_OPTIONS = ['Banner 组件', 'List 组件', 'Footer 组件'];
 interface PropsType {
@@ -34,6 +40,11 @@ const AreaItem: React.FC<PropsType> = props => {
   const { pageChild, changePageChild, removePageChild } = useStore(index);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [tempPageChild, setTempPageChild] = useState<Record<PropertyKey, any>>(pageChild);
+
+  useEffect(() => {
+    setTempPageChild(pageChild);
+  }, [pageChild]);
+
   const showModal = (): void => {
     setIsModalVisible(true);
   };
@@ -49,23 +60,18 @@ const AreaItem: React.FC<PropsType> = props => {
     setTempPageChild({ name: value, attributes: {}, children: [] });
   };
 
-  const changeTempPageChildAttribute = (key: string, value: string): void => {
+  const changeTempPageChildAttribute = (Obj: Record<PropertyKey, string | number>): void => {
     const newTempPageChild: typeof tempPageChild = JSON.parse(JSON.stringify(tempPageChild));
-    newTempPageChild.attributes[key] = value;
+    for (const k in Obj) {
+      newTempPageChild.attributes[k] = Obj[k];
+    }
     setTempPageChild(newTempPageChild);
   };
 
   const GetComponent: React.FC<Record<PropertyKey, any>> = props => {
-    switch (tempPageChild.name) {
-      case 'Banner 组件':
-        return <Banner {...props} />;
-      case 'List 组件':
-        return <List {...props} />;
-      case 'Footer 组件':
-        return <Footer {...props} />;
-      default:
-        return null;
-    }
+    const { name } = tempPageChild;
+    const C = map[name as keyof typeof map];
+    return C ? <C {...props} /> : null;
   };
 
   return (
