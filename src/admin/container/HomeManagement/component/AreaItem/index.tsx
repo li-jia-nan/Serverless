@@ -49,6 +49,12 @@ const AreaItem: React.FC<PropsType> = props => {
     setTempPageChild({ name: value, attributes: {}, children: [] });
   };
 
+  const changeTempPageChildAttribute = (key: string, value: string): void => {
+    const newTempPageChild: typeof tempPageChild = JSON.parse(JSON.stringify(tempPageChild));
+    newTempPageChild.attributes[key] = value;
+    setTempPageChild(newTempPageChild);
+  };
+
   const GetComponent: React.FC<Record<PropertyKey, any>> = props => {
     switch (tempPageChild.name) {
       case 'Banner 组件':
@@ -85,7 +91,10 @@ const AreaItem: React.FC<PropsType> = props => {
             </Option>
           ))}
         </Select>
-        <GetComponent {...tempPageChild} />
+        <GetComponent
+          {...tempPageChild}
+          changeTempPageChildAttribute={changeTempPageChildAttribute}
+        />
       </Modal>
     </li>
   );

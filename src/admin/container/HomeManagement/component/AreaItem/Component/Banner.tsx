@@ -5,7 +5,7 @@ import styles from './style.module.scss';
 const { TextArea } = Input;
 
 const Banner: React.FC<Record<PropertyKey, any>> = props => {
-  const { attributes = {} } = props;
+  const { attributes = {}, changeTempPageChildAttribute } = props;
   const { title, description } = attributes;
   return (
     <div className={styles.wrapper}>
@@ -15,7 +15,9 @@ const Banner: React.FC<Record<PropertyKey, any>> = props => {
           value={title}
           className={styles.content}
           placeholder="请输入页面标题"
-          // onChange={handleTitleChange}
+          onChange={e => {
+            changeTempPageChildAttribute('title', e.target.value);
+          }}
         />
       </div>
       <div className={styles.row}>
@@ -25,7 +27,9 @@ const Banner: React.FC<Record<PropertyKey, any>> = props => {
           className={styles.content}
           rows={2}
           placeholder="请输入页面描述"
-          // onChange={handleDescriptionChange}
+          onChange={e => {
+            changeTempPageChildAttribute('description', e.target.value);
+          }}
         />
       </div>
     </div>
