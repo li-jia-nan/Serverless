@@ -47,7 +47,6 @@ const AreaItem: React.FC<PropsType> = props => {
 
   useEffect(() => {
     setTempPageChild(pageChild);
-    //
   }, [pageChild]);
 
   const showModal = (): void => {
