@@ -23,6 +23,10 @@ interface PropsType {
   index: number;
 }
 
+interface GetComponentPropsType {
+  changeTempPageChildAttribute: (obj: Record<PropertyKey, string | number>) => void;
+}
+
 const useStore = (index: number) => {
   const dispatch = useDispatch();
   const pageChild = useTypeSelector(state => state.HomeManagement.schema.children[index]);
@@ -68,10 +72,10 @@ const AreaItem: React.FC<PropsType> = props => {
     setTempPageChild(newTempPageChild);
   };
 
-  const GetComponent: React.FC<Record<PropertyKey, any>> = props => {
+  const GetComponent: React.FC<GetComponentPropsType> = props => {
     const { name } = tempPageChild;
-    const C = map[name as keyof typeof map];
-    return C ? <C {...props} /> : null;
+    const Component = map[name as keyof typeof map];
+    return Component ? <Component {...props} /> : null;
   };
 
   return (
@@ -97,10 +101,7 @@ const AreaItem: React.FC<PropsType> = props => {
             </Option>
           ))}
         </Select>
-        <GetComponent
-          {...tempPageChild}
-          changeTempPageChildAttribute={changeTempPageChildAttribute}
-        />
+        <GetComponent changeTempPageChildAttribute={changeTempPageChildAttribute} />
       </Modal>
     </li>
   );

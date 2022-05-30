@@ -9,22 +9,31 @@ import {
   CHANGE_PAGE_CHILD_POSITION,
 } from './constant';
 
-interface InitType {
+interface AttributesType {
+  title: string;
+  description: string;
+  showSmallPic: boolean;
+  smallPicUrl: string;
+  backgroundUrl: string;
+  backgroundHeight: string | number;
+}
+
+export interface InitType {
   schema: {
     name: string;
-    attributes: Record<PropertyKey, any>;
-    children: any[];
+    attributes: Partial<AttributesType>;
+    children: Record<PropertyKey, string | number>[];
   };
 }
 
-const initialschema = parseJsonByString<Record<PropertyKey, any>>(window.localStorage.schema, {
+const initialschema = parseJsonByString<InitType['schema']>(window.localStorage.schema, {
   name: 'page',
   attributes: {},
   children: [],
 });
 
 const defaultState: InitType = {
-  schema: initialschema as InitType['schema'],
+  schema: initialschema,
 };
 
 const reducer: Reducer<typeof defaultState, AnyAction> = (state = defaultState, action) => {
@@ -46,7 +55,7 @@ const reducer: Reducer<typeof defaultState, AnyAction> = (state = defaultState, 
         const { oldIndex, newIndex } = action;
         const copy = original(draft.schema.children);
         draft.schema.children.splice(oldIndex, 1);
-        draft.schema.children.splice(newIndex, 0, copy?.[oldIndex]);
+        draft.schema.children.splice(newIndex, 0, copy?.[oldIndex] || {});
         break;
       default:
         break;
